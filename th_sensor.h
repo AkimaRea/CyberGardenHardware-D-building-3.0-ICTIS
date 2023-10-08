@@ -6,6 +6,10 @@ public:
   DHT(int DHpin = 2) {
     setPin(DHpin);
   }
+  float value = 0.0;
+  float getValue() {
+    return value;
+  }
   void start_test() {
     digitalWrite(DHpin, LOW);  //Потяните вниз шину, чтобы отправить сигнал запуска
     delay(30);                 //Задержка превышает 30 мс, так что DHT 11 может обнаружить сигнал запуска
@@ -26,7 +30,7 @@ public:
   void setPin(int pin) {
     DHpin = pin;
   }
-  double printResult() {
+  void printResult() {
     char str[10] = "";
     start_test();
     Serial.print("Humdity = ");
@@ -41,7 +45,7 @@ public:
     Serial.print(dat[3], DEC);  //Отображает десятичные знаки температуры;
     Serial.println('C');
     delay(1000);
-    return strtod(str,NULL);
+    value = float(strtod(str,NULL));
   }
 private:
   byte read_data() {
