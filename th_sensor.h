@@ -26,7 +26,8 @@ public:
   void setPin(int pin) {
     DHpin = pin;
   }
-  void printResult() {
+  double printResult() {
+    char str[10] = "";
     start_test();
     Serial.print("Humdity = ");
     Serial.print(dat[0], DEC);  //Отображает целочисленные биты влажности;
@@ -34,11 +35,13 @@ public:
     Serial.print(dat[1], DEC);  //Отображает десятичные знаки влажности;
     Serial.println('%');
     Serial.print("Temperature = ");
-    Serial.print(dat[2], DEC);  //Отображает целочисленные биты температуры;
+    itoa(dat[2],str, DEC);
+    Serial.print(str);  //Отображает целочисленные биты температуры;
     Serial.print('.');
     Serial.print(dat[3], DEC);  //Отображает десятичные знаки температуры;
     Serial.println('C');
     delay(1000);
+    return strtod(str,NULL);
   }
 private:
   byte read_data() {
