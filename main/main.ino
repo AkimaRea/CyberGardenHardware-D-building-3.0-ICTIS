@@ -1,15 +1,20 @@
 #include "th_sensor.h"
 #include "light_sensor.h"
 #include "pulse_sensor.h"
+#include "flame_sensor.h"
 // #include "cloud_service.h"
 
 // pins defined by gpios' number
 #define DHpin 15
-// #define DLpin 12
-// #define DLPowerPlu sPin 13
+#define DLpin 12
+#define DLPowerPlusPin 13
 #define DPPin 26
 #define DPPowerPlusPin 14
 #define DPPowerMinusPin 27
+
+#define DFPin 26
+#define DFPowerPlusPin 14
+#define DFPowerMinusPin 27
 
 // double temp = 0.0;
 // float humidity = 0.0;
@@ -21,11 +26,16 @@
 
 DHT dht(DHpin);
 DP dp(DPPin);
-// DL dl(DLpin);
+DL dl(DLpin);
+DF df(DFPin);
 
 void setup() {
   Serial.begin(9600);
   pinMode(DHpin, OUTPUT);
+
+  pinMode(DLpin, OUTPUT);
+  pinMode(DLPowerPlusPin, OUTPUT);
+  digitalWrite(DLPowerPlusPin, HIGH);
 
   pinMode(DPPin, INPUT);
   pinMode(DPPowerPlusPin, OUTPUT);
@@ -33,19 +43,25 @@ void setup() {
   digitalWrite(DPPowerPlusPin, HIGH);
   digitalWrite(DPPowerMinusPin, LOW);
 
-  // pinMode(DLpin, OUTPUT);
-  // pinMode(DLPowerPlusPin, OUTPUT);
-  // digitalWrite(DLPowerPlusPin, HIGH);
-
+  pinMode(DPPowerPlusPin, OUTPUT);
+  pinMode(DPPowerMinusPin, INPUT);
+  digitalWrite(DPPowerPlusPin, HIGH);
+  digitalWrite(DPPowerMinusPin, LOW);
+  
   // pinMode(13, OUTPUT);
   // digitalWrite(13, HIGH);
   // cloud.init();
 }
 
 void loop() {
-  dht.printResult();
-  dp.printResult();
-  // dl.printResult();
-  // temp = dht.getValue();
-  // cloud.sendData(temp);
+  float *dht_values;
+  dht_values = dht.getValue();
+  //dp.getValue();
+  //dl.printResult();
+  //temp = dht.getValue();
+  Serial.println("Device SmartClothes №0000");
+  Serial.println("Влажность:" + String(dht_values[0]) + " Температура:" + String(dht_values[1]));
+  Serial.println("Освещенность:" + String(dl.getValue()));
+  Serial.print("Показания сотрудника, пульс" + String(dp.getValue()));
+  //cloud.sendData(temp);
 }

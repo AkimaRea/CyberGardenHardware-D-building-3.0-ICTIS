@@ -11,7 +11,13 @@ public:
     value = analogRead(DLpin);
     Serial.println(DLpin);
   };
-
+  void calcValue() {
+    value = analogRead(DLpin);
+  }
+  int getValue() {
+    calcValue();
+    return value;
+  }
 private:
   int DLpin;
   int value = 0;
